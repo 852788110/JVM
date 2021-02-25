@@ -7,14 +7,15 @@ import (
 
 // internedStrings:字符串缓冲池
 var internedStrings = map[string]*Object{}
+var stringMutex sync.Mutex
 
-var m sync.Mutex
 func JString(loader *ClassLoader, goStr string) *Object {
-	m.Lock()
-	defer m.Unlock()
+	stringMutex.Lock()
 	if internedStr, ok := internedStrings[goStr]; ok {
+		stringMutex.Unlock()
 		return internedStr
 	}
+	stringMutex.Unlock()
 
 	chars := stringToUtf16(goStr)
 	jChars := &Object{loader.LoadClass("[C"), chars, nil}
@@ -23,7 +24,9 @@ func JString(loader *ClassLoader, goStr string) *Object {
 	jStr.SetRefVar("value", "[C", jChars)
 
 	// 将字符串对象放入缓冲池中
+	stringMutex.Lock()
 	internedStrings[goStr] = jStr
+	stringMutex.Unlock()
 	return jStr
 }
 

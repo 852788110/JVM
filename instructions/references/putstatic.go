@@ -27,7 +27,7 @@ func (self *PUT_STATIC) Execute(frame *rtda.Frame) {
 	}
 	if field.IsFinal() {
 		if currentClass != class || currentMethod.Name() != "<clinit>" {
-			panic("java.lang.IllegalAccessError")
+			panic("java.lang.IllegalAccessError shengmeigui")
 		}
 	}
 

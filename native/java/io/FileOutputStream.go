@@ -2,14 +2,13 @@ package io
 
 import "os"
 import "unsafe"
-import "jvmgo/jvm/native"
 import "jvmgo/jvm/rtda"
 
 const fos = "java/io/FileOutputStream"
 
-func init() {
+/*func init() {
 	native.Register(fos, "writeBytes", "([BIIZ)V", writeBytes)
-}
+}*/
 
 // private native void writeBytes(byte b[], int off, int len, boolean append) throws IOException;
 // ([BIIZ)V

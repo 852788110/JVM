@@ -2,17 +2,16 @@ package io
 
 import "path/filepath"
 import "os"
-import "jvmgo/jvm/native"
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/rtda/heap"
 
 const unixfs = "java/io/UnixFileSystem"
 
-func init() {
+/*func init() {
 	native.Register(unixfs, "canonicalize0", "(Ljava/lang/String;)Ljava/lang/String;", canonicalize0)
 	native.Register(unixfs, "getBooleanAttributes0", "(Ljava/io/File;)I", getBooleanAttributes0)
 
-}
+}*/
 
 // private native String canonicalize0(String path) throws IOException;
 // (Ljava/lang/String;)Ljava/lang/String;

@@ -1,14 +1,13 @@
 package security
 
 import "jvmgo/jvm/instructions/base"
-import "jvmgo/jvm/native"
 import "jvmgo/jvm/rtda"
 
-func init() {
+/*func init() {
 	native.Register("java/security/AccessController", "doPrivileged", "(Ljava/security/PrivilegedAction;)Ljava/lang/Object;", doPrivileged)
 	native.Register("java/security/AccessController", "doPrivileged", "(Ljava/security/PrivilegedExceptionAction;)Ljava/lang/Object;", doPrivileged)
 	native.Register("java/security/AccessController", "getStackAccessControlContext", "()Ljava/security/AccessControlContext;", getStackAccessControlContext)
-}
+}*/
 
 // @CallerSensitive
 // public static native <T> T

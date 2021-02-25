@@ -106,7 +106,9 @@ func (self *ClassLoader) loadNonArrayClass(name string) *Class {
 	data, entry := self.readClass(name)
 	class := self.defineClass(data)
 	link(class)
-
+	mutex.Lock()
+	self.classMap[class.name] = class
+	mutex.Unlock()
 	if self.verboseFlag {
 		fmt.Printf("[Loaded %s from %s]\n", name, entry)
 	}
@@ -129,9 +131,6 @@ func (self *ClassLoader) defineClass(data []byte) *Class {
 	class.loader = self
 	resolveSuperClass(class)
 	resolveInterfaces(class)
-	mutex.Lock()
-	self.classMap[class.name] = class
-	mutex.Unlock()
 	return class
 }
 

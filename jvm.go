@@ -24,7 +24,7 @@ func newJVM(cmd *Cmd) *JVM {
 }
 
 func (self *JVM) start() {
-	self.initVM()
+	//self.initVM()
 	self.execMain()
 }
 
