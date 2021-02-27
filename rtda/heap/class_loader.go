@@ -78,10 +78,10 @@ func (self *ClassLoader) LoadClass(name string) *Class {
 		class = self.loadNonArrayClass(name)
 	}
 
-	if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
+	/*if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
 		class.jClass = jlClassClass.NewObject()
 		class.jClass.extra = class
-	}
+	}*/
 
 	return class
 }
@@ -98,7 +98,23 @@ func (self *ClassLoader) loadArrayClass(name string) *Class {
 			self.LoadClass("java/io/Serializable"),
 		},
 	}
-	self.classMap[name] = class
+	/*self.classMap[name] = class*/
+
+	// 在这个地方加入双重校验，避免重复加载类
+	mutex.Lock()
+	if oldClass, ok := self.classMap[name]; ok {
+		// already loaded
+		mutex.Unlock()
+		return oldClass
+	}
+	self.classMap[class.name] = class
+
+	if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
+		class.jClass = jlClassClass.NewObject()
+		class.jClass.extra = class
+	}
+	mutex.Unlock()
+
 	return class
 }
 
@@ -106,9 +122,27 @@ func (self *ClassLoader) loadNonArrayClass(name string) *Class {
 	data, entry := self.readClass(name)
 	class := self.defineClass(data)
 	link(class)
-	mutex.Lock()
+	/*mutex.Lock()
 	self.classMap[class.name] = class
+	mutex.Unlock()*/
+
+	// 在这个地方加入双重校验，避免重复加载类
+	mutex.Lock()
+	if oldClass, ok := self.classMap[name]; ok {
+		// already loaded
+		mutex.Unlock()
+
+		// 这个地方得返回之前的类的引用
+		return oldClass
+	}
+	self.classMap[class.name] = class
+
+	if jlClassClass, ok := self.classMap["java/lang/Class"]; ok {
+		class.jClass = jlClassClass.NewObject()
+		class.jClass.extra = class
+	}
 	mutex.Unlock()
+
 	if self.verboseFlag {
 		fmt.Printf("[Loaded %s from %s]\n", name, entry)
 	}

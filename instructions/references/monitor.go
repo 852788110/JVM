@@ -12,6 +12,8 @@ func (self *MONITOR_ENTER) Execute(frame *rtda.Frame) {
 	if ref == nil {
 		panic("java.lang.NullPointerException")
 	}
+	monitor := ref.GetMonitor()
+	monitor.Lock()
 }
 
 // Exit monitor for object
@@ -23,4 +25,6 @@ func (self *MONITOR_EXIT) Execute(frame *rtda.Frame) {
 	if ref == nil {
 		panic("java.lang.NullPointerException")
 	}
+	monitor := ref.GetMonitor()
+	monitor.Unlock()
 }

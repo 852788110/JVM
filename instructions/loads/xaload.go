@@ -1,6 +1,9 @@
 package loads
 
-import "jvmgo/jvm/instructions/base"
+import (
+	"fmt"
+	"jvmgo/jvm/instructions/base"
+)
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/rtda/heap"
 
@@ -82,6 +85,10 @@ func (self *IALOAD) Execute(frame *rtda.Frame) {
 	index := stack.PopInt()
 	arrRef := stack.PopRef()
 
+	// test
+	if arrRef==nil {
+		fmt.Println("wocao")
+	}
 	checkNotNil(arrRef)
 	ints := arrRef.Ints()
 	checkIndex(len(ints), index)

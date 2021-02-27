@@ -15,26 +15,26 @@ func (self *Class) NewArray(count uint) *Object {
 	}
 	switch self.Name() {
 	case "[Z":
-		return &Object{self, make([]int8, count), nil}
+		return &Object{self, make([]int8, count), nil,&Monitor{}}
 	case "[B":
-		return &Object{self, make([]int8, count), nil}
+		return &Object{self, make([]int8, count), nil,&Monitor{}}
 	case "[C":
-		return &Object{self, make([]uint16, count), nil}
+		return &Object{self, make([]uint16, count), nil,&Monitor{}}
 	case "[S":
-		return &Object{self, make([]int16, count), nil}
+		return &Object{self, make([]int16, count), nil,&Monitor{}}
 	case "[I":
-		return &Object{self, make([]int32, count), nil}
+		return &Object{self, make([]int32, count), nil,&Monitor{}}
 	case "[J":
-		return &Object{self, make([]int64, count), nil}
+		return &Object{self, make([]int64, count), nil,&Monitor{}}
 	case "[F":
-		return &Object{self, make([]float32, count), nil}
+		return &Object{self, make([]float32, count), nil,&Monitor{}}
 	case "[D":
-		return &Object{self, make([]float64, count), nil}
+		return &Object{self, make([]float64, count), nil,&Monitor{}}
 	default:
-		return &Object{self, make([]*Object, count), nil}
+		return &Object{self, make([]*Object, count), nil,&Monitor{}}
 	}
 }
 
 func NewByteArray(loader *ClassLoader, bytes []int8) *Object {
-	return &Object{loader.LoadClass("[B"), bytes, nil}
+	return &Object{loader.LoadClass("[B"), bytes, nil,&Monitor{}}
 }

@@ -1,9 +1,27 @@
 package heap
 
+import "sync"
+
+type Monitor struct {
+	state int32
+	mutex sync.Mutex
+}
+
+func (self *Monitor) Lock() {
+	self.mutex.Lock()
+	self.state++
+}
+
+func (self *Monitor) Unlock() {
+	self.state--;
+	self.mutex.Unlock()
+}
+
 type Object struct {
-	class *Class
-	data  interface{} // Slots for Object, []int32 for int[] ...
-	extra interface{}
+	class   *Class
+	data    interface{} // Slots for Object, []int32 for int[] ...
+	extra   interface{}
+	monitor *Monitor
 }
 
 // create normal (non-array) object
@@ -11,6 +29,10 @@ func newObject(class *Class) *Object {
 	return &Object{
 		class: class,
 		data:  newSlots(class.instanceSlotCount),
+		monitor: &Monitor{
+			state: 0,
+			mutex: sync.Mutex{},
+		},
 	}
 }
 
@@ -55,4 +77,8 @@ func (self *Object) GetIntVar(name, descriptor string) int32 {
 	field := self.class.getField(name, descriptor, false)
 	slots := self.data.(Slots)
 	return slots.GetInt(field.slotId)
+}
+
+func (self *Object) GetMonitor() *Monitor {
+	return self.monitor
 }

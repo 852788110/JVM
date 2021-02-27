@@ -10,6 +10,7 @@ var internedStrings = map[string]*Object{}
 var stringMutex sync.Mutex
 
 func JString(loader *ClassLoader, goStr string) *Object {
+	// 读取string时得加锁
 	stringMutex.Lock()
 	if internedStr, ok := internedStrings[goStr]; ok {
 		stringMutex.Unlock()
@@ -18,13 +19,17 @@ func JString(loader *ClassLoader, goStr string) *Object {
 	stringMutex.Unlock()
 
 	chars := stringToUtf16(goStr)
-	jChars := &Object{loader.LoadClass("[C"), chars, nil}
+	jChars := &Object{loader.LoadClass("[C"), chars, nil,&Monitor{}}
 
 	jStr := loader.LoadClass("java/lang/String").NewObject()
 	jStr.SetRefVar("value", "[C", jChars)
 
 	// 将字符串对象放入缓冲池中
 	stringMutex.Lock()
+	if internedStr, ok := internedStrings[goStr]; ok {
+		stringMutex.Unlock()
+		return internedStr
+	}
 	internedStrings[goStr] = jStr
 	stringMutex.Unlock()
 	return jStr
