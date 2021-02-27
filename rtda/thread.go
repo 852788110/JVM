@@ -12,15 +12,23 @@ JVM
         OperandStack
 */
 type Thread struct {
-	pc    int // the address of the instruction currently being executed
+	pc    int
 	stack *Stack
-	// todo
+	id    int // 线程id号
 }
 
 func NewThread() *Thread {
 	return &Thread{
 		stack: newStack(1024),
 	}
+}
+
+func (self *Thread) SetId(id int) {
+	self.id = id
+}
+
+func (self *Thread) GetId() int {
+	return self.id
 }
 
 func (self *Thread) PC() int {

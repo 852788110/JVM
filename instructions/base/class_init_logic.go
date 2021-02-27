@@ -1,13 +1,23 @@
 package base
 
-import "jvmgo/jvm/rtda"
+import (
+	"fmt"
+	"jvmgo/jvm/rtda"
+)
 import "jvmgo/jvm/rtda/heap"
 
 // jvms 5.5
 func InitClass(thread *rtda.Thread, class *heap.Class) {
-	class.StartInit()
-	scheduleClinit(thread, class)
-	initSuperClass(thread, class)
+	if class.Name() == "java/lang/Integer" {
+		fmt.Println("Nice")
+	}
+	class.GetMutex().Lock(thread)
+	if !class.InitStarted() {
+		scheduleClinit(thread, class)
+		initSuperClass(thread, class)
+		// class.StartInit()
+	}
+	// class.GetMutex().Unlock()
 }
 
 func scheduleClinit(thread *rtda.Thread, class *heap.Class) {
@@ -26,4 +36,10 @@ func initSuperClass(thread *rtda.Thread, class *heap.Class) {
 			InitClass(thread, superClass)
 		}
 	}
+}
+
+func InitClassMutil(thread *rtda.Thread, class *heap.Class) {
+	class.StartInit()
+	scheduleClinit(thread, class)
+	initSuperClass(thread, class)
 }

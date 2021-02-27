@@ -1,7 +1,36 @@
 package heap
 
-import "strings"
+import (
+	"jvmgo/jvm/rtda"
+	"strings"
+	"sync"
+)
 import "jvmgo/jvm/classfile"
+
+type ReentrantLock struct {
+	mutex  *sync.Mutex
+	state  int
+	thread *rtda.Thread
+}
+
+func (self *ReentrantLock) Lock(thread *rtda.Thread) {
+	if self.thread != thread {
+		self.mutex.Lock()
+	}
+	self.state++
+}
+
+func (self *ReentrantLock) Unlock(thread *rtda.Thread) {
+	self.state--
+
+	if self.state < 0 {
+		panic("state is negtive")
+	}
+
+	if self.state == 0 {
+		self.mutex.Unlock()
+	}
+}
 
 // name, superClassName and interfaceNames are all binary names(jvms8-4.2.1)
 type Class struct {
@@ -20,6 +49,7 @@ type Class struct {
 	staticSlotCount   uint
 	staticVars        Slots
 	initStarted       bool
+	mutex             *ReentrantLock
 	jClass            *Object
 }
 
@@ -33,6 +63,11 @@ func newClass(cf *classfile.ClassFile) *Class {
 	class.fields = newFields(class, cf.Fields())
 	class.methods = newMethods(class, cf.Methods())
 	class.sourceFile = getSourceFile(cf)
+	class.mutex = &ReentrantLock{
+		mutex:  &sync.Mutex{},
+		state:  0,
+		thread: nil,
+	}
 	return class
 }
 
@@ -102,6 +137,10 @@ func (self *Class) StaticVars() Slots {
 func (self *Class) InitStarted() bool {
 	return self.initStarted
 }
+func (self *Class) GetMutex() *ReentrantLock {
+	return self.mutex
+}
+
 func (self *Class) JClass() *Object {
 	return self.jClass
 }

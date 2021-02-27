@@ -1,12 +1,23 @@
 package control
 
-import "jvmgo/jvm/instructions/base"
+import (
+	"jvmgo/jvm/instructions/base"
+)
 import "jvmgo/jvm/rtda"
 
 // Return void from method
 type RETURN struct{ base.NoOperandsInstruction }
 
 func (self *RETURN) Execute(frame *rtda.Frame) {
+	method := frame.Method()
+	if method.Name() == "<clinit>" {
+		mut := method.Class().GetMutex()
+		method.Class().StartInit()
+
+		thread := frame.Thread()
+		mut.Unlock(thread)
+
+	}
 	frame.Thread().PopFrame()
 }
 
