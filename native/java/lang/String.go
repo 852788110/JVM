@@ -11,8 +11,7 @@ const jlString = "java/lang/String"
 
 func init() {
 	native.Register(jlString, "intern", "()Ljava/lang/String;", intern)
-	native.Register("Test", "print0", "(Ljava/lang/String;)V", print0)
-	native.Register("NewThread", "print0", "(Ljava/lang/String;)V", print0)
+	native.Register("Fmt", "print0", "(Ljava/lang/String;)V", print0)
 }
 
 // public native String intern();

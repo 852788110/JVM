@@ -2,18 +2,16 @@ package heap
 
 import "sync"
 
+// 对于monitor这个是可重入锁
 type Monitor struct {
-	state int32
-	mutex sync.Mutex
+	mutex *ReentrantLock
 }
 
-func (self *Monitor) Lock() {
-	self.mutex.Lock()
-	self.state++
+func (self *Monitor) Lock(thread int) {
+	self.mutex.Lock(thread)
 }
 
 func (self *Monitor) Unlock() {
-	self.state--;
 	self.mutex.Unlock()
 }
 
@@ -30,8 +28,11 @@ func newObject(class *Class) *Object {
 		class: class,
 		data:  newSlots(class.instanceSlotCount),
 		monitor: &Monitor{
-			state: 0,
-			mutex: sync.Mutex{},
+			mutex: &ReentrantLock{
+				mutex:  &sync.Mutex{},
+				state:  0,
+				thread: -1,
+			},
 		},
 	}
 }

@@ -52,6 +52,7 @@ func loop(thread *rtda.Thread, logInst bool) {
 		inst.Execute(frame)
 		// 如果jvm为空，退出执行
 		if thread.IsStackEmpty() {
+			Wg.Done()
 			break
 		}
 	}

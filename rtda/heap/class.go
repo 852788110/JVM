@@ -1,26 +1,27 @@
 package heap
 
 import (
-	"jvmgo/jvm/rtda"
 	"strings"
 	"sync"
 )
 import "jvmgo/jvm/classfile"
 
+// 重入锁
 type ReentrantLock struct {
 	mutex  *sync.Mutex
 	state  int
-	thread *rtda.Thread
+	thread int
 }
 
-func (self *ReentrantLock) Lock(thread *rtda.Thread) {
+func (self *ReentrantLock) Lock(thread int) {
 	if self.thread != thread {
 		self.mutex.Lock()
+		self.thread = thread
 	}
 	self.state++
 }
 
-func (self *ReentrantLock) Unlock(thread *rtda.Thread) {
+func (self *ReentrantLock) Unlock() {
 	self.state--
 
 	if self.state < 0 {
@@ -28,6 +29,7 @@ func (self *ReentrantLock) Unlock(thread *rtda.Thread) {
 	}
 
 	if self.state == 0 {
+		self.thread = -1
 		self.mutex.Unlock()
 	}
 }
@@ -66,7 +68,7 @@ func newClass(cf *classfile.ClassFile) *Class {
 	class.mutex = &ReentrantLock{
 		mutex:  &sync.Mutex{},
 		state:  0,
-		thread: nil,
+		thread: -1,
 	}
 	return class
 }

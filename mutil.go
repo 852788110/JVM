@@ -24,6 +24,7 @@ func start0(frame *rtda.Frame) {
 
 	subThread := rtda.NewThread()
 
+	// 为该子线程分配一个ThreadId，这个地方得加锁
 	threadMutex.Lock()
 	subThread.SetId(ThreadIds)
 	ThreadIds++
@@ -38,5 +39,7 @@ func start0(frame *rtda.Frame) {
 
 	subThread.PushFrame(newframe)
 
+	// 防止main进程退出了之后，所有的groutine都结束了
+	Wg.Add(1)
 	go interpret(subThread, false)
 }

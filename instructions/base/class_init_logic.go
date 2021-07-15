@@ -1,23 +1,18 @@
 package base
 
 import (
-	"fmt"
 	"jvmgo/jvm/rtda"
 )
 import "jvmgo/jvm/rtda/heap"
 
 // jvms 5.5
 func InitClass(thread *rtda.Thread, class *heap.Class) {
-	if class.Name() == "java/lang/Integer" {
-		fmt.Println("Nice")
-	}
-	class.GetMutex().Lock(thread)
+	class.GetMutex().Lock(thread.GetId())
 	if !class.InitStarted() {
+		class.StartInit()
 		scheduleClinit(thread, class)
 		initSuperClass(thread, class)
-		// class.StartInit()
 	}
-	// class.GetMutex().Unlock()
 }
 
 func scheduleClinit(thread *rtda.Thread, class *heap.Class) {

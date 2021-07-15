@@ -3,13 +3,8 @@ package reserved
 import "jvmgo/jvm/instructions/base"
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/native"
-import _ "jvmgo/jvm/native/java/io"
 import _ "jvmgo/jvm/native/java/lang"
-import _ "jvmgo/jvm/native/java/security"
-import _ "jvmgo/jvm/native/java/util/concurrent/atomic"
-import _ "jvmgo/jvm/native/sun/io"
-import _ "jvmgo/jvm/native/sun/misc"
-import _ "jvmgo/jvm/native/sun/reflect"
+
 
 // Invoke native method
 type INVOKE_NATIVE struct{ base.NoOperandsInstruction }

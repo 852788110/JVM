@@ -10,12 +10,11 @@ type RETURN struct{ base.NoOperandsInstruction }
 
 func (self *RETURN) Execute(frame *rtda.Frame) {
 	method := frame.Method()
+	// 完成初始化方法，初始化方法只可能是return指令
 	if method.Name() == "<clinit>" {
 		mut := method.Class().GetMutex()
 		method.Class().StartInit()
-
-		thread := frame.Thread()
-		mut.Unlock(thread)
+		mut.Unlock()
 
 	}
 	frame.Thread().PopFrame()

@@ -16,6 +16,7 @@ func (self *INVOKE_STATIC) Execute(frame *rtda.Frame) {
 	}
 
 	class := resolvedMethod.Class()
+	// 这个地方应该设置城开始初始化
 	if !class.InitStarted() {
 		frame.RevertNextPC()
 		base.InitClass(frame.Thread(), class)
