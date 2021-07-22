@@ -1,12 +1,16 @@
 package heap
 
-import "jvmgo/jvm/classfile"
+import (
+	"jvmgo/jvm/classfile"
+	"jvmgo/jvm/instructions"
+	"jvmgo/jvm/instructions/base"
+)
 
 type Method struct {
 	ClassMember
 	maxStack                uint
 	maxLocals               uint
-	code                    []byte
+	code                    []base.Instruction
 	exceptionTable          ExceptionTable // todo: rename
 	lineNumberTable         *classfile.LineNumberTableAttribute
 	exceptions              *classfile.ExceptionsAttribute // todo: rename
@@ -32,9 +36,6 @@ func newMethod(class *Class, cfMethod *classfile.MemberInfo) *Method {
 	md := parseMethodDescriptor(method.descriptor)
 	method.parsedDescriptor = md
 	method.calcArgSlotCount(md.parameterTypes)
-	if method.IsNative() {
-		method.injectCodeAttribute(md.returnType)
-	}
 	return method
 }
 
@@ -42,7 +43,7 @@ func (self *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 	if codeAttr := cfMethod.CodeAttribute(); codeAttr != nil {
 		self.maxStack = codeAttr.MaxStack()
 		self.maxLocals = codeAttr.MaxLocals()
-		self.code = codeAttr.Code()
+		self.code = parseCode(codeAttr.Code())
 		self.lineNumberTable = codeAttr.LineNumberTableAttribute()
 		self.exceptionTable = newExceptionTable(codeAttr.ExceptionTable(),
 			self.class.constantPool)
@@ -51,6 +52,29 @@ func (self *Method) copyAttributes(cfMethod *classfile.MemberInfo) {
 	self.annotationData = cfMethod.RuntimeVisibleAnnotationsAttributeData()
 	self.parameterAnnotationData = cfMethod.RuntimeVisibleParameterAnnotationsAttributeData()
 	self.annotationDefaultData = cfMethod.AnnotationDefaultAttributeData()
+}
+
+func NewBytecodeReader(code []byte) *base.BytecodeReader {
+	return &base.BytecodeReader{
+		Code: code,
+		Pc:   0,
+	}
+}
+
+func parseCode(code []byte) []base.Instruction {
+	reader := NewBytecodeReader(code)
+	var insts []base.Instruction
+	for !reader.Finished() {
+		opcode := reader.ReadUint8()
+		//　得到下一条指令
+		inst := instructions.NewInstruction(opcode)
+		// 取出操作
+		inst.FetchOperands(reader)
+
+		insts = append(insts, inst)
+	}
+
+	return insts
 }
 
 func (self *Method) calcArgSlotCount(paramTypes []string) {
@@ -62,25 +86,6 @@ func (self *Method) calcArgSlotCount(paramTypes []string) {
 	}
 	if !self.IsStatic() {
 		self.argSlotCount++ // `this` reference
-	}
-}
-
-func (self *Method) injectCodeAttribute(returnType string) {
-	self.maxStack = 4 // todo
-	self.maxLocals = self.argSlotCount
-	switch returnType[0] {
-	case 'V':
-		self.code = []byte{0xfe, 0xb1} // return
-	case 'L', '[':
-		self.code = []byte{0xfe, 0xb0} // areturn
-	case 'D':
-		self.code = []byte{0xfe, 0xaf} // dreturn
-	case 'F':
-		self.code = []byte{0xfe, 0xae} // freturn
-	case 'J':
-		self.code = []byte{0xfe, 0xad} // lreturn
-	default:
-		self.code = []byte{0xfe, 0xac} // ireturn
 	}
 }
 
@@ -110,7 +115,7 @@ func (self *Method) MaxStack() uint {
 func (self *Method) MaxLocals() uint {
 	return self.maxLocals
 }
-func (self *Method) Code() []byte {
+func (self *Method) Code() []base.Instruction {
 	return self.code
 }
 func (self *Method) ParameterAnnotationData() []byte {
@@ -124,14 +129,6 @@ func (self *Method) ParsedDescriptor() *MethodDescriptor {
 }
 func (self *Method) ArgSlotCount() uint {
 	return self.argSlotCount
-}
-
-func (self *Method) FindExceptionHandler(exClass *Class, pc int) int {
-	handler := self.exceptionTable.findExceptionHandler(exClass, pc)
-	if handler != nil {
-		return handler.handlerPc
-	}
-	return -1
 }
 
 func (self *Method) GetLineNumber(pc int) int {
@@ -149,41 +146,4 @@ func (self *Method) isConstructor() bool {
 }
 func (self *Method) isClinit() bool {
 	return self.IsStatic() && self.name == "<clinit>"
-}
-
-// reflection
-func (self *Method) ParameterTypes() []*Class {
-	if self.argSlotCount == 0 {
-		return nil
-	}
-
-	paramTypes := self.parsedDescriptor.parameterTypes
-	paramClasses := make([]*Class, len(paramTypes))
-	for i, paramType := range paramTypes {
-		paramClassName := toClassName(paramType)
-		paramClasses[i] = self.class.loader.LoadClass(paramClassName)
-	}
-
-	return paramClasses
-}
-func (self *Method) ReturnType() *Class {
-	returnType := self.parsedDescriptor.returnType
-	returnClassName := toClassName(returnType)
-	return self.class.loader.LoadClass(returnClassName)
-}
-func (self *Method) ExceptionTypes() []*Class {
-	if self.exceptions == nil {
-		return nil
-	}
-
-	exIndexTable := self.exceptions.ExceptionIndexTable()
-	exClasses := make([]*Class, len(exIndexTable))
-	cp := self.class.constantPool
-
-	for i, exIndex := range exIndexTable {
-		classRef := cp.GetConstant(uint(exIndex)).(*ClassRef)
-		exClasses[i] = classRef.ResolvedClass()
-	}
-
-	return exClasses
 }

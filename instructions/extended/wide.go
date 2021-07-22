@@ -4,11 +4,11 @@ import "jvmgo/jvm/instructions/base"
 import "jvmgo/jvm/instructions/loads"
 import "jvmgo/jvm/instructions/math"
 import "jvmgo/jvm/instructions/stores"
-import "jvmgo/jvm/rtda"
 
 // Extend local variable index by additional bytes
 type WIDE struct {
 	modifiedInstruction base.Instruction
+	Name                string
 }
 
 func (self *WIDE) FetchOperands(reader *base.BytecodeReader) {
@@ -64,6 +64,10 @@ func (self *WIDE) FetchOperands(reader *base.BytecodeReader) {
 	}
 }
 
-func (self *WIDE) Execute(frame *rtda.Frame) {
-	self.modifiedInstruction.Execute(frame)
+func (self *WIDE) GetOperands() int {
+	return -1
+}
+
+func (self *WIDE) GetName() string {
+	return self.Name
 }

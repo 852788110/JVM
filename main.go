@@ -1,20 +1,22 @@
 package main
 
-import "sync"
-
-var Wg *sync.WaitGroup
+import (
+	"fmt"
+	"io/ioutil"
+	"jvmgo/jvm/rtda/heap"
+)
 
 func main() {
-	Wg = &sync.WaitGroup{}
-	cmd := parseCmd()
-	Wg.Add(1)
-	if cmd.versionFlag {
-		println("version 0.0.1")
-	} else if cmd.helpFlag || cmd.class == "" {
-		printUsage()
-	} else {
-		// 创建一个JVM对象，并执行start方法
-		newJVM(cmd).start()
-		Wg.Wait()
+	path := "/Users/liujie/IdeaProjects/jvm/out/production/jvm/lucky.class"
+	// 读取字节码
+	data, err := ioutil.ReadFile(path)
+	if err != nil {
+		return
 	}
+
+	// 解析字节码
+	class := heap.ParseClass(data)
+
+	// 得到字节码结构
+	fmt.Println(class)
 }

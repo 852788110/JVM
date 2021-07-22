@@ -1,25 +1,25 @@
 package base
 
 type BytecodeReader struct {
-	code []byte // bytecodes
-	pc   int
+	Code []byte // bytecodes
+	Pc   int
 }
 
 func (self *BytecodeReader) Reset(code []byte, pc int) {
-	self.code = code
-	self.pc = pc
+	self.Code = code
+	self.Pc = pc
 }
 
 func (self *BytecodeReader) PC() int {
-	return self.pc
+	return self.Pc
 }
 
 func (self *BytecodeReader) ReadInt8() int8 {
 	return int8(self.ReadUint8())
 }
 func (self *BytecodeReader) ReadUint8() uint8 {
-	i := self.code[self.pc]
-	self.pc++
+	i := self.Code[self.Pc]
+	self.Pc++
 	return i
 }
 
@@ -51,7 +51,11 @@ func (self *BytecodeReader) ReadInt32s(n int32) []int32 {
 
 // used by lookupswitch and tableswitch
 func (self *BytecodeReader) SkipPadding() {
-	for self.pc%4 != 0 {
+	for self.Pc%4 != 0 {
 		self.ReadUint8()
 	}
+}
+
+func (self *BytecodeReader) Finished() bool {
+	return self.Pc >= len(self.Code)
 }

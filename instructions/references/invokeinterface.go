@@ -1,14 +1,13 @@
 package references
 
 import "jvmgo/jvm/instructions/base"
-import "jvmgo/jvm/rtda"
-import "jvmgo/jvm/rtda/heap"
 
 // Invoke interface method
 type INVOKE_INTERFACE struct {
 	index uint
 	// count uint8
 	// zero uint8
+	Name string
 }
 
 func (self *INVOKE_INTERFACE) FetchOperands(reader *base.BytecodeReader) {
@@ -17,30 +16,10 @@ func (self *INVOKE_INTERFACE) FetchOperands(reader *base.BytecodeReader) {
 	reader.ReadUint8() // must be 0
 }
 
-func (self *INVOKE_INTERFACE) Execute(frame *rtda.Frame) {
-	cp := frame.Method().Class().ConstantPool()
-	methodRef := cp.GetConstant(self.index).(*heap.InterfaceMethodRef)
-	resolvedMethod := methodRef.ResolvedInterfaceMethod()
-	if resolvedMethod.IsStatic() || resolvedMethod.IsPrivate() {
-		panic("java.lang.IncompatibleClassChangeError")
-	}
+func (self *INVOKE_INTERFACE) GetOperands() int {
+	return int(self.index)
+}
 
-	ref := frame.OperandStack().GetRefFromTop(resolvedMethod.ArgSlotCount() - 1)
-	if ref == nil {
-		panic("java.lang.NullPointerException") // todo
-	}
-	if !ref.Class().IsImplements(methodRef.ResolvedClass()) {
-		panic("java.lang.IncompatibleClassChangeError")
-	}
-
-	methodToBeInvoked := heap.LookupMethodInClass(ref.Class(),
-		methodRef.Name(), methodRef.Descriptor())
-	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
-		panic("java.lang.AbstractMethodError")
-	}
-	if !methodToBeInvoked.IsPublic() {
-		panic("java.lang.IllegalAccessError")
-	}
-
-	base.InvokeMethod(frame, methodToBeInvoked)
+func (self *INVOKE_INTERFACE) GetName() string {
+	return self.Name
 }

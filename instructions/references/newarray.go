@@ -1,8 +1,6 @@
 package references
 
 import "jvmgo/jvm/instructions/base"
-import "jvmgo/jvm/rtda"
-import "jvmgo/jvm/rtda/heap"
 
 const (
 	//Array Type  atype
@@ -19,43 +17,17 @@ const (
 // Create new array
 type NEW_ARRAY struct {
 	atype uint8
+	Name  string
 }
 
 func (self *NEW_ARRAY) FetchOperands(reader *base.BytecodeReader) {
 	self.atype = reader.ReadUint8()
 }
-func (self *NEW_ARRAY) Execute(frame *rtda.Frame) {
-	stack := frame.OperandStack()
-	count := stack.PopInt()
-	if count < 0 {
-		panic("java.lang.NegativeArraySizeException")
-	}
 
-	classLoader := frame.Method().Class().Loader()
-	arrClass := getPrimitiveArrayClass(classLoader, self.atype)
-	arr := arrClass.NewArray(uint(count))
-	stack.PushRef(arr)
+func (self *NEW_ARRAY) GetOperands() int {
+	return int(self.atype)
 }
 
-func getPrimitiveArrayClass(loader *heap.ClassLoader, atype uint8) *heap.Class {
-	switch atype {
-	case AT_BOOLEAN:
-		return loader.LoadClass("[Z")
-	case AT_BYTE:
-		return loader.LoadClass("[B")
-	case AT_CHAR:
-		return loader.LoadClass("[C")
-	case AT_SHORT:
-		return loader.LoadClass("[S")
-	case AT_INT:
-		return loader.LoadClass("[I")
-	case AT_LONG:
-		return loader.LoadClass("[J")
-	case AT_FLOAT:
-		return loader.LoadClass("[F")
-	case AT_DOUBLE:
-		return loader.LoadClass("[D")
-	default:
-		panic("Invalid atype!")
-	}
+func (self *NEW_ARRAY) GetName() string {
+	return self.Name
 }

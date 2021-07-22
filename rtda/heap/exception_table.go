@@ -31,19 +31,3 @@ func getCatchType(index uint, cp *ConstantPool) *ClassRef {
 	}
 	return cp.GetConstant(index).(*ClassRef)
 }
-
-func (self ExceptionTable) findExceptionHandler(exClass *Class, pc int) *ExceptionHandler {
-	for _, handler := range self {
-		// jvms: The start_pc is inclusive and end_pc is exclusive
-		if pc >= handler.startPc && pc < handler.endPc {
-			if handler.catchType == nil {
-				return handler
-			}
-			catchClass := handler.catchType.ResolvedClass()
-			if catchClass == exClass || catchClass.IsSuperClassOf(exClass) {
-				return handler
-			}
-		}
-	}
-	return nil
-}

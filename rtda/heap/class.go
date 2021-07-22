@@ -2,61 +2,19 @@ package heap
 
 import (
 	"strings"
-	"sync"
 )
 import "jvmgo/jvm/classfile"
 
-// 重入锁
-type ReentrantLock struct {
-	mutex  *sync.Mutex
-	state  int
-	thread int
-}
-
-func (self *ReentrantLock) Lock(thread int) {
-	if self.thread != thread {
-		self.mutex.Lock()
-		self.thread = thread
-	}
-	self.state++
-}
-
-func (self *ReentrantLock) Unlock() {
-	self.state--
-
-	if self.state < 0 {
-		panic("state is negtive")
-	}
-
-	if self.state == 0 {
-		self.thread = -1
-		self.mutex.Unlock()
-	}
-}
-
 // name, superClassName and interfaceNames are all binary names(jvms8-4.2.1)
 type Class struct {
-	accessFlags       uint16
-	name              string // thisClassName
-	superClassName    string
-	interfaceNames    []string
-	constantPool      *ConstantPool
-	fields            []*Field
-	methods           []*Method
-	sourceFile        string
-	loader            *ClassLoader
-	superClass        *Class
-	interfaces        []*Class
-	instanceSlotCount uint
-	staticSlotCount   uint
-	staticVars        Slots
-	initStarted       bool
-	initFinished      bool
-	// 初始化该类的线程
-	initThread int
-
-	mutex  *ReentrantLock
-	jClass *Object
+	accessFlags    uint16
+	name           string // thisClassName
+	superClassName string
+	interfaceNames []string
+	constantPool   *ConstantPool
+	fields         []*Field
+	methods        []*Method
+	sourceFile     string
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -68,28 +26,8 @@ func newClass(cf *classfile.ClassFile) *Class {
 	class.constantPool = newConstantPool(class, cf.ConstantPool())
 	class.fields = newFields(class, cf.Fields())
 	class.methods = newMethods(class, cf.Methods())
-	class.sourceFile = getSourceFile(cf)
-	class.mutex = &ReentrantLock{
-		mutex:  &sync.Mutex{},
-		state:  0,
-		thread: -1,
-	}
+	//class.sourceFile = getSourceFile(cf)
 	return class
-}
-
-func getSourceFile(cf *classfile.ClassFile) string {
-	if sfAttr := cf.SourceFileAttribute(); sfAttr != nil {
-		return sfAttr.FileName()
-	}
-	return "Unknown" // todo
-}
-
-func (self *Class) GetThread() int {
-	return self.initThread
-}
-
-func (self *Class) SetThread(thread int) {
-	self.initThread = thread
 }
 
 func (self *Class) IsPublic() bool {
@@ -117,6 +55,14 @@ func (self *Class) IsEnum() bool {
 	return 0 != self.accessFlags&ACC_ENUM
 }
 
+func (self *Class) GetSuperClass() string {
+	return self.superClassName
+}
+
+func (self *Class) GetInterface() []string {
+	return self.interfaceNames
+}
+
 // getters
 func (self *Class) AccessFlags() uint16 {
 	return self.accessFlags
@@ -136,40 +82,6 @@ func (self *Class) Methods() []*Method {
 func (self *Class) SourceFile() string {
 	return self.sourceFile
 }
-func (self *Class) Loader() *ClassLoader {
-	return self.loader
-}
-func (self *Class) SuperClass() *Class {
-	return self.superClass
-}
-func (self *Class) Interfaces() []*Class {
-	return self.interfaces
-}
-func (self *Class) StaticVars() Slots {
-	return self.staticVars
-}
-func (self *Class) InitStarted() bool {
-	return self.initStarted
-}
-func (self *Class) GetMutex() *ReentrantLock {
-	return self.mutex
-}
-
-func (self *Class) JClass() *Object {
-	return self.jClass
-}
-
-func (self *Class) StartInit() {
-	self.initStarted = true
-}
-
-func (self *Class) FinishedInit() {
-	self.initFinished = true
-}
-
-func (self *Class) InitFinished() bool {
-	return self.initFinished
-}
 
 // jvms 5.4.4
 func (self *Class) isAccessibleTo(other *Class) bool {
@@ -184,55 +96,6 @@ func (self *Class) GetPackageName() string {
 	return ""
 }
 
-func (self *Class) GetMainMethod() *Method {
-	return self.getMethod("main", "([Ljava/lang/String;)V", true)
-}
-func (self *Class) GetClinitMethod() *Method {
-	return self.getMethod("<clinit>", "()V", true)
-}
-
-func (self *Class) getMethod(name, descriptor string, isStatic bool) *Method {
-	for c := self; c != nil; c = c.superClass {
-		for _, method := range c.methods {
-			if method.IsStatic() == isStatic &&
-				method.name == name &&
-				method.descriptor == descriptor {
-
-				return method
-			}
-		}
-	}
-	return nil
-}
-
-func (self *Class) GetMethod(name, descriptor string, isStatic bool) *Method {
-	for c := self; c != nil; c = c.superClass {
-		for _, method := range c.methods {
-			if method.IsStatic() == isStatic &&
-				method.name == name &&
-				method.descriptor == descriptor {
-
-				return method
-			}
-		}
-	}
-	return nil
-}
-
-func (self *Class) getField(name, descriptor string, isStatic bool) *Field {
-	for c := self; c != nil; c = c.superClass {
-		for _, field := range c.fields {
-			if field.IsStatic() == isStatic &&
-				field.name == name &&
-				field.descriptor == descriptor {
-
-				return field
-			}
-		}
-	}
-	return nil
-}
-
 func (self *Class) isJlObject() bool {
 	return self.name == "java/lang/Object"
 }
@@ -243,15 +106,6 @@ func (self *Class) isJioSerializable() bool {
 	return self.name == "java/io/Serializable"
 }
 
-func (self *Class) NewObject() *Object {
-	return newObject(self)
-}
-
-func (self *Class) ArrayClass() *Class {
-	arrayClassName := getArrayClassName(self.name)
-	return self.loader.LoadClass(arrayClassName)
-}
-
 func (self *Class) JavaName() string {
 	return strings.Replace(self.name, "/", ".", -1)
 }
@@ -259,23 +113,6 @@ func (self *Class) JavaName() string {
 func (self *Class) IsPrimitive() bool {
 	_, ok := primitiveTypes[self.name]
 	return ok
-}
-
-func (self *Class) GetInstanceMethod(name, descriptor string) *Method {
-	return self.getMethod(name, descriptor, false)
-}
-func (self *Class) GetStaticMethod(name, descriptor string) *Method {
-	return self.getMethod(name, descriptor, true)
-}
-
-// reflection
-func (self *Class) GetRefVar(fieldName, fieldDescriptor string) *Object {
-	field := self.getField(fieldName, fieldDescriptor, true)
-	return self.staticVars.GetRef(field.slotId)
-}
-func (self *Class) SetRefVar(fieldName, fieldDescriptor string, ref *Object) {
-	field := self.getField(fieldName, fieldDescriptor, true)
-	self.staticVars.SetRef(field.slotId, ref)
 }
 
 func (self *Class) GetFields(publicOnly bool) []*Field {
@@ -290,10 +127,6 @@ func (self *Class) GetFields(publicOnly bool) []*Field {
 	} else {
 		return self.fields
 	}
-}
-
-func (self *Class) GetConstructor(descriptor string) *Method {
-	return self.GetInstanceMethod("<init>", descriptor)
 }
 
 func (self *Class) GetConstructors(publicOnly bool) []*Method {

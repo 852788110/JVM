@@ -1,7 +1,6 @@
 package control
 
 import "jvmgo/jvm/instructions/base"
-import "jvmgo/jvm/rtda"
 
 /*
 lookupswitch
@@ -21,6 +20,7 @@ type LOOKUP_SWITCH struct {
 	defaultOffset int32
 	npairs        int32
 	matchOffsets  []int32
+	Name          string
 }
 
 func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
@@ -30,14 +30,10 @@ func (self *LOOKUP_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	self.matchOffsets = reader.ReadInt32s(self.npairs * 2)
 }
 
-func (self *LOOKUP_SWITCH) Execute(frame *rtda.Frame) {
-	key := frame.OperandStack().PopInt()
-	for i := int32(0); i < self.npairs*2; i += 2 {
-		if self.matchOffsets[i] == key {
-			offset := self.matchOffsets[i+1]
-			base.Branch(frame, int(offset))
-			return
-		}
-	}
-	base.Branch(frame, int(self.defaultOffset))
+func (self *LOOKUP_SWITCH) GetOperands() int {
+	return int(self.defaultOffset)
+}
+
+func (self *LOOKUP_SWITCH) GetName() string {
+	return self.Name
 }

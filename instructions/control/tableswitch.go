@@ -1,7 +1,6 @@
 package control
 
 import "jvmgo/jvm/instructions/base"
-import "jvmgo/jvm/rtda"
 
 /*
 tableswitch
@@ -26,6 +25,7 @@ type TABLE_SWITCH struct {
 	low           int32
 	high          int32
 	jumpOffsets   []int32
+	Name          string
 }
 
 func (self *TABLE_SWITCH) FetchOperands(reader *base.BytecodeReader) {
@@ -37,15 +37,10 @@ func (self *TABLE_SWITCH) FetchOperands(reader *base.BytecodeReader) {
 	self.jumpOffsets = reader.ReadInt32s(jumpOffsetsCount)
 }
 
-func (self *TABLE_SWITCH) Execute(frame *rtda.Frame) {
-	index := frame.OperandStack().PopInt()
+func (self *TABLE_SWITCH) GetOperands() int {
+	return int(self.defaultOffset)
+}
 
-	var offset int
-	if index >= self.low && index <= self.high {
-		offset = int(self.jumpOffsets[index-self.low])
-	} else {
-		offset = int(self.defaultOffset)
-	}
-
-	base.Branch(frame, offset)
+func (self *TABLE_SWITCH) GetName() string {
+	return self.Name
 }
