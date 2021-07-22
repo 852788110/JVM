@@ -1,10 +1,11 @@
 package reserved
 
-import "jvmgo/jvm/instructions/base"
+import (
+	"jvmgo/jvm/instructions/base"
+)
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/native"
 import _ "jvmgo/jvm/native/java/lang"
-
 
 // Invoke native method
 type INVOKE_NATIVE struct{ base.NoOperandsInstruction }

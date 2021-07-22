@@ -1,6 +1,8 @@
 package references
 
-import "jvmgo/jvm/instructions/base"
+import (
+	"jvmgo/jvm/instructions/base"
+)
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/rtda/heap"
 

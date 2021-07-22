@@ -13,7 +13,7 @@ func (self *RETURN) Execute(frame *rtda.Frame) {
 	// 完成初始化方法，初始化方法只可能是return指令
 	if method.Name() == "<clinit>" {
 		mut := method.Class().GetMutex()
-		method.Class().StartInit()
+		method.Class().FinishedInit()
 		mut.Unlock()
 
 	}

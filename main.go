@@ -2,9 +2,10 @@ package main
 
 import "sync"
 
-var Wg sync.WaitGroup
+var Wg *sync.WaitGroup
 
 func main() {
+	Wg = &sync.WaitGroup{}
 	cmd := parseCmd()
 	Wg.Add(1)
 	if cmd.versionFlag {

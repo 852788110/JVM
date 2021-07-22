@@ -6,8 +6,9 @@ import (
 	"sync"
 )
 
+// common/Print.print0(Ljava/lang/String;)V
 func init() {
-	native.Register("NewThread", "start0", "()V", start0)
+	native.Register("common/Thread", "start0", "()V", start0)
 }
 
 var ThreadIds int = 1
@@ -20,7 +21,7 @@ var threadMutex sync.Mutex
 // 将thread对象的run方法入栈
 func start0(frame *rtda.Frame) {
 	// 得到其class对象
-	currentClass := frame.Method().Class()
+	//currentClass := frame.Method().Class()
 
 	subThread := rtda.NewThread()
 
@@ -30,10 +31,10 @@ func start0(frame *rtda.Frame) {
 	ThreadIds++
 	threadMutex.Unlock()
 
-	newframe := rtda.NewFrame(subThread, currentClass.GetMethod("run", "()V", false))
-
 	// 从前一个栈帧的操作数栈上取得　对象引用
 	ref := frame.LocalVars().GetThis()
+	newframe := rtda.NewFrame(subThread, ref.Class().GetMethod("run", "()V", false))
+
 	// 将对象引用放到新创键的frame的0号位置
 	newframe.LocalVars().SetRef(0, ref)
 

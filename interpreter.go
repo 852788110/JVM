@@ -7,6 +7,7 @@ import "jvmgo/jvm/rtda"
 
 // 解释器
 func interpret(thread *rtda.Thread, logInst bool) {
+	fmt.Println("新创建了一个线程")
 	defer catchErr(thread)
 	loop(thread, logInst)
 }
@@ -33,6 +34,9 @@ func loop(thread *rtda.Thread, logInst bool) {
 		pc := frame.NextPC()
 		thread.SetPC(pc)
 
+		if thread.GetId() == 1 {
+			fmt.Println("1")
+		}
 		// 读取栈帧中code属性
 		reader.Reset(frame.Method().Code(), pc)
 		opcode := reader.ReadUint8()

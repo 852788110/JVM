@@ -1,6 +1,8 @@
 package references
 
-import "jvmgo/jvm/instructions/base"
+import (
+	"jvmgo/jvm/instructions/base"
+)
 import "jvmgo/jvm/rtda"
 import "jvmgo/jvm/rtda/heap"
 
@@ -43,7 +45,7 @@ func (self *INVOKE_SPECIAL) Execute(frame *rtda.Frame) {
 		methodToBeInvoked = heap.LookupMethodInClass(currentClass.SuperClass(),
 			methodRef.Name(), methodRef.Descriptor())
 	}
-
+	
 	if methodToBeInvoked == nil || methodToBeInvoked.IsAbstract() {
 		panic("java.lang.AbstractMethodError")
 	}

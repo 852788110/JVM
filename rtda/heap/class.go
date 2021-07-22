@@ -51,8 +51,12 @@ type Class struct {
 	staticSlotCount   uint
 	staticVars        Slots
 	initStarted       bool
-	mutex             *ReentrantLock
-	jClass            *Object
+	initFinished      bool
+	// 初始化该类的线程
+	initThread int
+
+	mutex  *ReentrantLock
+	jClass *Object
 }
 
 func newClass(cf *classfile.ClassFile) *Class {
@@ -78,6 +82,14 @@ func getSourceFile(cf *classfile.ClassFile) string {
 		return sfAttr.FileName()
 	}
 	return "Unknown" // todo
+}
+
+func (self *Class) GetThread() int {
+	return self.initThread
+}
+
+func (self *Class) SetThread(thread int) {
+	self.initThread = thread
 }
 
 func (self *Class) IsPublic() bool {
@@ -149,6 +161,14 @@ func (self *Class) JClass() *Object {
 
 func (self *Class) StartInit() {
 	self.initStarted = true
+}
+
+func (self *Class) FinishedInit() {
+	self.initFinished = true
+}
+
+func (self *Class) InitFinished() bool {
+	return self.initFinished
 }
 
 // jvms 5.4.4

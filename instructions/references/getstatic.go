@@ -12,10 +12,18 @@ func (self *GET_STATIC) Execute(frame *rtda.Frame) {
 	fieldRef := cp.GetConstant(self.Index).(*heap.FieldRef)
 	field := fieldRef.ResolvedField()
 	class := field.Class()
+	// 如果没有开始初始化的话
 	if !class.InitStarted() {
+		// 如果没有初始化的话，那么此处设置开始初始化
 		frame.RevertNextPC()
 		base.InitClass(frame.Thread(), class)
 		return
+	} else if !class.InitFinished() {
+		// 如果没有初始化完成的话
+		// 如果初始化的线程是当前线程
+		if class.GetThread() != frame.Thread().GetId() {
+			class.GetMutex().Lock(frame.Thread().GetId())
+		}
 	}
 
 	if !field.IsStatic() {
