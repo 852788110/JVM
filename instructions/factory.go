@@ -15,153 +15,153 @@ import . "jvmgo/jvm/instructions/stores"
 
 // NoOperandsInstruction singletons
 var (
-	nop          = &NOP{}
-	aconst_null  = &ACONST_NULL{}
-	iconst_m1    = &ICONST_M1{}
-	iconst_0     = &ICONST_0{}
-	iconst_1     = &ICONST_1{}
-	iconst_2     = &ICONST_2{}
-	iconst_3     = &ICONST_3{}
-	iconst_4     = &ICONST_4{}
-	iconst_5     = &ICONST_5{}
-	lconst_0     = &LCONST_0{}
-	lconst_1     = &LCONST_1{}
-	fconst_0     = &FCONST_0{}
-	fconst_1     = &FCONST_1{}
-	fconst_2     = &FCONST_2{}
-	dconst_0     = &DCONST_0{}
-	dconst_1     = &DCONST_1{}
-	iload_0      = &ILOAD_0{}
-	iload_1      = &ILOAD_1{}
-	iload_2      = &ILOAD_2{}
-	iload_3      = &ILOAD_3{}
-	lload_0      = &LLOAD_0{}
-	lload_1      = &LLOAD_1{}
-	lload_2      = &LLOAD_2{}
-	lload_3      = &LLOAD_3{}
-	fload_0      = &FLOAD_0{}
-	fload_1      = &FLOAD_1{}
-	fload_2      = &FLOAD_2{}
-	fload_3      = &FLOAD_3{}
-	dload_0      = &DLOAD_0{}
-	dload_1      = &DLOAD_1{}
-	dload_2      = &DLOAD_2{}
-	dload_3      = &DLOAD_3{}
-	aload_0      = &ALOAD_0{}
-	aload_1      = &ALOAD_1{}
-	aload_2      = &ALOAD_2{}
-	aload_3      = &ALOAD_3{}
-	iaload       = &IALOAD{}
-	laload       = &LALOAD{}
-	faload       = &FALOAD{}
-	daload       = &DALOAD{}
-	aaload       = &AALOAD{}
-	baload       = &BALOAD{}
-	caload       = &CALOAD{}
-	saload       = &SALOAD{}
-	istore_0     = &ISTORE_0{}
-	istore_1     = &ISTORE_1{}
-	istore_2     = &ISTORE_2{}
-	istore_3     = &ISTORE_3{}
-	lstore_0     = &LSTORE_0{}
-	lstore_1     = &LSTORE_1{}
-	lstore_2     = &LSTORE_2{}
-	lstore_3     = &LSTORE_3{}
-	fstore_0     = &FSTORE_0{}
-	fstore_1     = &FSTORE_1{}
-	fstore_2     = &FSTORE_2{}
-	fstore_3     = &FSTORE_3{}
-	dstore_0     = &DSTORE_0{}
-	dstore_1     = &DSTORE_1{}
-	dstore_2     = &DSTORE_2{}
-	dstore_3     = &DSTORE_3{}
-	astore_0     = &ASTORE_0{}
-	astore_1     = &ASTORE_1{}
-	astore_2     = &ASTORE_2{}
-	astore_3     = &ASTORE_3{}
-	iastore      = &IASTORE{}
-	lastore      = &LASTORE{}
-	fastore      = &FASTORE{}
-	dastore      = &DASTORE{}
-	aastore      = &AASTORE{}
-	bastore      = &BASTORE{}
-	castore      = &CASTORE{}
-	sastore      = &SASTORE{}
-	pop          = &POP{}
-	pop2         = &POP2{}
-	dup          = &DUP{}
-	dup_x1       = &DUP_X1{}
-	dup_x2       = &DUP_X2{}
-	dup2         = &DUP2{}
-	dup2_x1      = &DUP2_X1{}
-	dup2_x2      = &DUP2_X2{}
-	swap         = &SWAP{}
-	iadd         = &IADD{}
-	ladd         = &LADD{}
-	fadd         = &FADD{}
-	dadd         = &DADD{}
-	isub         = &ISUB{}
-	lsub         = &LSUB{}
-	fsub         = &FSUB{}
-	dsub         = &DSUB{}
-	imul         = &IMUL{}
-	lmul         = &LMUL{}
-	fmul         = &FMUL{}
-	dmul         = &DMUL{}
-	idiv         = &IDIV{}
-	ldiv         = &LDIV{}
-	fdiv         = &FDIV{}
-	ddiv         = &DDIV{}
-	irem         = &IREM{}
-	lrem         = &LREM{}
-	frem         = &FREM{}
-	drem         = &DREM{}
-	ineg         = &INEG{}
-	lneg         = &LNEG{}
-	fneg         = &FNEG{}
-	dneg         = &DNEG{}
-	ishl         = &ISHL{}
-	lshl         = &LSHL{}
-	ishr         = &ISHR{}
-	lshr         = &LSHR{}
-	iushr        = &IUSHR{}
-	lushr        = &LUSHR{}
-	iand         = &IAND{}
-	land         = &LAND{}
-	ior          = &IOR{}
-	lor          = &LOR{}
-	ixor         = &IXOR{}
-	lxor         = &LXOR{}
-	i2l          = &I2L{}
-	i2f          = &I2F{}
-	i2d          = &I2D{}
-	l2i          = &L2I{}
-	l2f          = &L2F{}
-	l2d          = &L2D{}
-	f2i          = &F2I{}
-	f2l          = &F2L{}
-	f2d          = &F2D{}
-	d2i          = &D2I{}
-	d2l          = &D2L{}
-	d2f          = &D2F{}
-	i2b          = &I2B{}
-	i2c          = &I2C{}
-	i2s          = &I2S{}
-	lcmp         = &LCMP{}
-	fcmpl        = &FCMPL{}
-	fcmpg        = &FCMPG{}
-	dcmpl        = &DCMPL{}
-	dcmpg        = &DCMPG{}
-	ireturn      = &IRETURN{}
-	lreturn      = &LRETURN{}
-	freturn      = &FRETURN{}
-	dreturn      = &DRETURN{}
-	areturn      = &ARETURN{}
-	_return      = &RETURN{}
-	arraylength  = &ARRAY_LENGTH{}
-	athrow       = &ATHROW{}
-	monitorenter = &MONITOR_ENTER{}
-	monitorexit  = &MONITOR_EXIT{}
+	nop          = &NOP{NoOperandsInstruction: base.NoOperandsInstruction{Name: "nop"}}
+	aconst_null  = &ACONST_NULL{NoOperandsInstruction: base.NoOperandsInstruction{Name: "aconst_null"}}
+	iconst_m1    = &ICONST_M1{NoOperandsInstruction: base.NoOperandsInstruction{Name: "iconst_m1"}}
+	iconst_0     = &ICONST_0{base.NoOperandsInstruction{Name: "iconst 0"}}
+	iconst_1     = &ICONST_1{base.NoOperandsInstruction{Name: "iconst 1"}}
+	iconst_2     = &ICONST_2{base.NoOperandsInstruction{Name: "iconst 2"}}
+	iconst_3     = &ICONST_3{base.NoOperandsInstruction{Name: "iconst 3"}}
+	iconst_4     = &ICONST_4{base.NoOperandsInstruction{Name: "iconst 4"}}
+	iconst_5     = &ICONST_5{base.NoOperandsInstruction{Name: "iconst 5"}}
+	lconst_0     = &LCONST_0{base.NoOperandsInstruction{Name: "lconst 0"}}
+	lconst_1     = &LCONST_1{base.NoOperandsInstruction{Name: "lconst 1"}}
+	fconst_0     = &FCONST_0{base.NoOperandsInstruction{Name: "fconst 0"}}
+	fconst_1     = &FCONST_1{base.NoOperandsInstruction{Name: "fconst 1"}}
+	fconst_2     = &FCONST_2{base.NoOperandsInstruction{Name: "fconst 2"}}
+	dconst_0     = &DCONST_0{base.NoOperandsInstruction{Name: "dconst 0"}}
+	dconst_1     = &DCONST_1{base.NoOperandsInstruction{Name: "dconst 1"}}
+	iload_0      = &ILOAD_0{base.NoOperandsInstruction{Name: "iload 0"}}
+	iload_1      = &ILOAD_1{base.NoOperandsInstruction{Name: "iload 1"}}
+	iload_2      = &ILOAD_2{base.NoOperandsInstruction{Name: "iload 2"}}
+	iload_3      = &ILOAD_3{base.NoOperandsInstruction{Name: "iload 3"}}
+	lload_0      = &LLOAD_0{base.NoOperandsInstruction{Name: "lload 0"}}
+	lload_1      = &LLOAD_1{base.NoOperandsInstruction{Name: "lload 1"}}
+	lload_2      = &LLOAD_2{base.NoOperandsInstruction{Name: "lload 2"}}
+	lload_3      = &LLOAD_3{base.NoOperandsInstruction{Name: "lload 3"}}
+	fload_0      = &FLOAD_0{base.NoOperandsInstruction{Name: "fload 2"}}
+	fload_1      = &FLOAD_1{base.NoOperandsInstruction{Name: "fload 1"}}
+	fload_2      = &FLOAD_2{base.NoOperandsInstruction{Name: "fload 2"}}
+	fload_3      = &FLOAD_3{base.NoOperandsInstruction{Name: "fload 3"}}
+	dload_0      = &DLOAD_0{base.NoOperandsInstruction{Name: "dload 0"}}
+	dload_1      = &DLOAD_1{base.NoOperandsInstruction{Name: "dload 1"}}
+	dload_2      = &DLOAD_2{base.NoOperandsInstruction{Name: "dload 2"}}
+	dload_3      = &DLOAD_3{base.NoOperandsInstruction{Name: "dload 3"}}
+	aload_0      = &ALOAD_0{base.NoOperandsInstruction{Name: "aload 0"}}
+	aload_1      = &ALOAD_1{base.NoOperandsInstruction{Name: "aload 1"}}
+	aload_2      = &ALOAD_2{base.NoOperandsInstruction{Name: "aload 2"}}
+	aload_3      = &ALOAD_3{base.NoOperandsInstruction{Name: "aload 3"}}
+	iaload       = &IALOAD{base.NoOperandsInstruction{Name: "iaload"}}
+	laload       = &LALOAD{base.NoOperandsInstruction{Name: "laload"}}
+	faload       = &FALOAD{base.NoOperandsInstruction{Name: "faload"}}
+	daload       = &DALOAD{base.NoOperandsInstruction{Name: "daload"}}
+	aaload       = &AALOAD{base.NoOperandsInstruction{Name: "aaload"}}
+	baload       = &BALOAD{base.NoOperandsInstruction{Name: "baload"}}
+	caload       = &CALOAD{base.NoOperandsInstruction{Name: "caload"}}
+	saload       = &SALOAD{base.NoOperandsInstruction{Name: "saload"}}
+	istore_0     = &ISTORE_0{base.NoOperandsInstruction{Name: "istore 0"}}
+	istore_1     = &ISTORE_1{base.NoOperandsInstruction{Name: "istore 1"}}
+	istore_2     = &ISTORE_2{base.NoOperandsInstruction{Name: "istore 2"}}
+	istore_3     = &ISTORE_3{base.NoOperandsInstruction{Name: "istore 3"}}
+	lstore_0     = &LSTORE_0{base.NoOperandsInstruction{Name: "lstore 0"}}
+	lstore_1     = &LSTORE_1{base.NoOperandsInstruction{Name: "lstore 1"}}
+	lstore_2     = &LSTORE_2{base.NoOperandsInstruction{Name: "lstore 2"}}
+	lstore_3     = &LSTORE_3{base.NoOperandsInstruction{Name: "lstore 3"}}
+	fstore_0     = &FSTORE_0{base.NoOperandsInstruction{Name: "fstore 0"}}
+	fstore_1     = &FSTORE_1{base.NoOperandsInstruction{Name: "fstore 1"}}
+	fstore_2     = &FSTORE_2{base.NoOperandsInstruction{Name: "fstore 2"}}
+	fstore_3     = &FSTORE_3{base.NoOperandsInstruction{Name: "fstore 3"}}
+	dstore_0     = &DSTORE_0{base.NoOperandsInstruction{Name: "dstore 0"}}
+	dstore_1     = &DSTORE_1{base.NoOperandsInstruction{Name: "dstore 1"}}
+	dstore_2     = &DSTORE_2{base.NoOperandsInstruction{Name: "dstore 2"}}
+	dstore_3     = &DSTORE_3{base.NoOperandsInstruction{Name: "dstore 3"}}
+	astore_0     = &ASTORE_0{base.NoOperandsInstruction{Name: "astore 0"}}
+	astore_1     = &ASTORE_1{base.NoOperandsInstruction{Name: "astore 1"}}
+	astore_2     = &ASTORE_2{base.NoOperandsInstruction{Name: "astore 2"}}
+	astore_3     = &ASTORE_3{base.NoOperandsInstruction{Name: "astore 3"}}
+	iastore      = &IASTORE{base.NoOperandsInstruction{Name: "iastore"}}
+	lastore      = &LASTORE{base.NoOperandsInstruction{Name: "lastore"}}
+	fastore      = &FASTORE{base.NoOperandsInstruction{Name: "fastore"}}
+	dastore      = &DASTORE{base.NoOperandsInstruction{Name: "dastore"}}
+	aastore      = &AASTORE{base.NoOperandsInstruction{Name: "aastore"}}
+	bastore      = &BASTORE{base.NoOperandsInstruction{Name: "bastore"}}
+	castore      = &CASTORE{base.NoOperandsInstruction{Name: "castore"}}
+	sastore      = &SASTORE{base.NoOperandsInstruction{Name: "sastore"}}
+	pop          = &POP{base.NoOperandsInstruction{Name: "pop"}}
+	pop2         = &POP2{base.NoOperandsInstruction{Name: "pop2"}}
+	dup          = &DUP{base.NoOperandsInstruction{Name: "dup"}}
+	dup_x1       = &DUP_X1{base.NoOperandsInstruction{Name: "dup x1"}}
+	dup_x2       = &DUP_X2{base.NoOperandsInstruction{Name: "dup x2"}}
+	dup2         = &DUP2{base.NoOperandsInstruction{Name: "dup2"}}
+	dup2_x1      = &DUP2_X1{base.NoOperandsInstruction{Name: "dup2 x1"}}
+	dup2_x2      = &DUP2_X2{base.NoOperandsInstruction{Name: "dup2 x2"}}
+	swap         = &SWAP{base.NoOperandsInstruction{Name: "swap"}}
+	iadd         = &IADD{base.NoOperandsInstruction{Name: "iadd"}}
+	ladd         = &LADD{base.NoOperandsInstruction{Name: "ladd"}}
+	fadd         = &FADD{base.NoOperandsInstruction{Name: "fadd"}}
+	dadd         = &DADD{base.NoOperandsInstruction{Name: "dadd"}}
+	isub         = &ISUB{base.NoOperandsInstruction{Name: "isub"}}
+	lsub         = &LSUB{base.NoOperandsInstruction{Name: "lsub"}}
+	fsub         = &FSUB{base.NoOperandsInstruction{Name: "fsub"}}
+	dsub         = &DSUB{base.NoOperandsInstruction{Name: "dsub"}}
+	imul         = &IMUL{base.NoOperandsInstruction{Name: "imul"}}
+	lmul         = &LMUL{base.NoOperandsInstruction{Name: "lmul"}}
+	fmul         = &FMUL{base.NoOperandsInstruction{Name: "fmul"}}
+	dmul         = &DMUL{base.NoOperandsInstruction{Name: "dmul"}}
+	idiv         = &IDIV{base.NoOperandsInstruction{Name: "idiv"}}
+	ldiv         = &LDIV{base.NoOperandsInstruction{Name: "ldiv"}}
+	fdiv         = &FDIV{base.NoOperandsInstruction{Name: "fdiv"}}
+	ddiv         = &DDIV{base.NoOperandsInstruction{Name: "ddiv"}}
+	irem         = &IREM{base.NoOperandsInstruction{Name: "irem"}}
+	lrem         = &LREM{base.NoOperandsInstruction{Name: "lrem"}}
+	frem         = &FREM{base.NoOperandsInstruction{Name: "frem"}}
+	drem         = &DREM{base.NoOperandsInstruction{Name: "drem"}}
+	ineg         = &INEG{base.NoOperandsInstruction{Name: "ineg"}}
+	lneg         = &LNEG{base.NoOperandsInstruction{Name: "lneg"}}
+	fneg         = &FNEG{base.NoOperandsInstruction{Name: "fneg"}}
+	dneg         = &DNEG{base.NoOperandsInstruction{Name: "dneg"}}
+	ishl         = &ISHL{base.NoOperandsInstruction{Name: "ishl"}}
+	lshl         = &LSHL{base.NoOperandsInstruction{Name: "lshl"}}
+	ishr         = &ISHR{base.NoOperandsInstruction{Name: "ishr"}}
+	lshr         = &LSHR{base.NoOperandsInstruction{Name: "lshr"}}
+	iushr        = &IUSHR{base.NoOperandsInstruction{Name: "iushr"}}
+	lushr        = &LUSHR{base.NoOperandsInstruction{Name: "lushr"}}
+	iand         = &IAND{base.NoOperandsInstruction{Name: "iand"}}
+	land         = &LAND{base.NoOperandsInstruction{Name: "land"}}
+	ior          = &IOR{base.NoOperandsInstruction{Name: "ior"}}
+	lor          = &LOR{base.NoOperandsInstruction{Name: "lor"}}
+	ixor         = &IXOR{base.NoOperandsInstruction{Name: "ixor"}}
+	lxor         = &LXOR{base.NoOperandsInstruction{Name: "lxor"}}
+	i2l          = &I2L{base.NoOperandsInstruction{Name: "i2l"}}
+	i2f          = &I2F{base.NoOperandsInstruction{Name: "i2f"}}
+	i2d          = &I2D{base.NoOperandsInstruction{Name: "i2d"}}
+	l2i          = &L2I{base.NoOperandsInstruction{Name: "l2i"}}
+	l2f          = &L2F{base.NoOperandsInstruction{Name: "l2f"}}
+	l2d          = &L2D{base.NoOperandsInstruction{Name: "l2d"}}
+	f2i          = &F2I{base.NoOperandsInstruction{Name: "l2i"}}
+	f2l          = &F2L{base.NoOperandsInstruction{Name: "f2l"}}
+	f2d          = &F2D{base.NoOperandsInstruction{Name: "f2d"}}
+	d2i          = &D2I{base.NoOperandsInstruction{Name: "d2i"}}
+	d2l          = &D2L{base.NoOperandsInstruction{Name: "d2l"}}
+	d2f          = &D2F{base.NoOperandsInstruction{Name: "d2f"}}
+	i2b          = &I2B{base.NoOperandsInstruction{Name: "i2b"}}
+	i2c          = &I2C{base.NoOperandsInstruction{Name: "i2c"}}
+	i2s          = &I2S{base.NoOperandsInstruction{Name: "i2s"}}
+	lcmp         = &LCMP{base.NoOperandsInstruction{Name: "lcmp"}}
+	fcmpl        = &FCMPL{base.NoOperandsInstruction{Name: "fcmpl"}}
+	fcmpg        = &FCMPG{base.NoOperandsInstruction{Name: "fcmpg"}}
+	dcmpl        = &DCMPL{base.NoOperandsInstruction{Name: "dcmpl"}}
+	dcmpg        = &DCMPG{base.NoOperandsInstruction{Name: "dcmpg"}}
+	ireturn      = &IRETURN{base.NoOperandsInstruction{Name: "ireturn"}}
+	lreturn      = &LRETURN{base.NoOperandsInstruction{Name: "lreturn"}}
+	freturn      = &FRETURN{base.NoOperandsInstruction{Name: "freturn"}}
+	dreturn      = &DRETURN{base.NoOperandsInstruction{Name: "dreturn"}}
+	areturn      = &ARETURN{base.NoOperandsInstruction{Name: "areturn"}}
+	_return      = &RETURN{base.NoOperandsInstruction{Name: "return"}}
+	arraylength  = &ARRAY_LENGTH{base.NoOperandsInstruction{Name: "array length"}}
+	athrow       = &ATHROW{base.NoOperandsInstruction{Name: "athrow"}}
+	monitorenter = &MONITOR_ENTER{base.NoOperandsInstruction{Name: "monitor enter"}}
+	monitorexit  = &MONITOR_EXIT{base.NoOperandsInstruction{Name: "monitor exit"}}
 )
 
 func NewInstruction(opcode byte) base.Instruction {
@@ -199,25 +199,25 @@ func NewInstruction(opcode byte) base.Instruction {
 	case 0x0f:
 		return dconst_1
 	case 0x10:
-		return &BIPUSH{}
+		return &BIPUSH{Name: "bipush"}
 	case 0x11:
-		return &SIPUSH{}
+		return &SIPUSH{Name: "sipush"}
 	case 0x12:
-		return &LDC{}
+		return &LDC{base.Index8Instruction{Name: "ldc"}}
 	case 0x13:
-		return &LDC_W{}
+		return &LDC_W{base.Index16Instruction{Name: "ldc_w"}}
 	case 0x14:
-		return &LDC2_W{}
+		return &LDC2_W{base.Index16Instruction{Name: "ldc2_w"}}
 	case 0x15:
-		return &ILOAD{}
+		return &ILOAD{base.Index8Instruction{Name: "iload"}}
 	case 0x16:
-		return &LLOAD{}
+		return &LLOAD{base.Index8Instruction{Name: "lload"}}
 	case 0x17:
-		return &FLOAD{}
+		return &FLOAD{base.Index8Instruction{Name: "fload"}}
 	case 0x18:
-		return &DLOAD{}
+		return &DLOAD{base.Index8Instruction{Name: "dload"}}
 	case 0x19:
-		return &ALOAD{}
+		return &ALOAD{base.Index8Instruction{Name: "aload"}}
 	case 0x1a:
 		return iload_0
 	case 0x1b:
@@ -275,15 +275,15 @@ func NewInstruction(opcode byte) base.Instruction {
 	case 0x35:
 		return saload
 	case 0x36:
-		return &ISTORE{}
+		return &ISTORE{base.Index8Instruction{Name: "istore"}}
 	case 0x37:
-		return &LSTORE{}
+		return &LSTORE{base.Index8Instruction{Name: "lstore"}}
 	case 0x38:
-		return &FSTORE{}
+		return &FSTORE{base.Index8Instruction{Name: "fstore"}}
 	case 0x39:
-		return &DSTORE{}
+		return &DSTORE{base.Index8Instruction{Name: "dstore"}}
 	case 0x3a:
-		return &ASTORE{}
+		return &ASTORE{base.Index8Instruction{Name: "astore"}}
 	case 0x3b:
 		return istore_0
 	case 0x3c:
@@ -431,7 +431,7 @@ func NewInstruction(opcode byte) base.Instruction {
 	case 0x83:
 		return lxor
 	case 0x84:
-		return &IINC{}
+		return &IINC{Name: "iinc"}
 	case 0x85:
 		return i2l
 	case 0x86:
@@ -473,43 +473,43 @@ func NewInstruction(opcode byte) base.Instruction {
 	case 0x98:
 		return dcmpg
 	case 0x99:
-		return &IFEQ{}
+		return &IFEQ{base.BranchInstruction{Name: "ifeq"}}
 	case 0x9a:
-		return &IFNE{}
+		return &IFNE{base.BranchInstruction{Name: "ifne"}}
 	case 0x9b:
-		return &IFLT{}
+		return &IFLT{base.BranchInstruction{Name: "iflt"}}
 	case 0x9c:
-		return &IFGE{}
+		return &IFGE{base.BranchInstruction{Name: "ifge"}}
 	case 0x9d:
-		return &IFGT{}
+		return &IFGT{base.BranchInstruction{Name: "ifgt"}}
 	case 0x9e:
-		return &IFLE{}
+		return &IFLE{base.BranchInstruction{Name: "ifle"}}
 	case 0x9f:
-		return &IF_ICMPEQ{}
+		return &IF_ICMPEQ{base.BranchInstruction{Name: "if icmpeq"}}
 	case 0xa0:
-		return &IF_ICMPNE{}
+		return &IF_ICMPNE{base.BranchInstruction{Name: "if icmpne"}}
 	case 0xa1:
-		return &IF_ICMPLT{}
+		return &IF_ICMPLT{base.BranchInstruction{Name: "if icmplt"}}
 	case 0xa2:
-		return &IF_ICMPGE{}
+		return &IF_ICMPGE{base.BranchInstruction{Name: "if icmpge"}}
 	case 0xa3:
-		return &IF_ICMPGT{}
+		return &IF_ICMPGT{base.BranchInstruction{Name: "if icmpgt"}}
 	case 0xa4:
-		return &IF_ICMPLE{}
+		return &IF_ICMPLE{base.BranchInstruction{Name: "if icmple"}}
 	case 0xa5:
-		return &IF_ACMPEQ{}
+		return &IF_ACMPEQ{base.BranchInstruction{Name: "if acmpeq"}}
 	case 0xa6:
-		return &IF_ACMPNE{}
+		return &IF_ACMPNE{base.BranchInstruction{Name: "if acmpne"}}
 	case 0xa7:
-		return &GOTO{}
+		return &GOTO{base.BranchInstruction{Name: "goto"}}
 	// case 0xa8:
 	// 	return &JSR{}
 	// case 0xa9:
 	// 	return &RET{}
 	case 0xaa:
-		return &TABLE_SWITCH{}
+		return &TABLE_SWITCH{Name: "table switch"}
 	case 0xab:
-		return &LOOKUP_SWITCH{}
+		return &LOOKUP_SWITCH{Name: "lookup switch"}
 	case 0xac:
 		return ireturn
 	case 0xad:
@@ -523,51 +523,51 @@ func NewInstruction(opcode byte) base.Instruction {
 	case 0xb1:
 		return _return
 	case 0xb2:
-		return &GET_STATIC{}
+		return &GET_STATIC{base.Index16Instruction{Name: "get static"}}
 	case 0xb3:
-		return &PUT_STATIC{}
+		return &PUT_STATIC{base.Index16Instruction{Name: "put static"}}
 	case 0xb4:
-		return &GET_FIELD{}
+		return &GET_FIELD{base.Index16Instruction{Name: "get field"}}
 	case 0xb5:
-		return &PUT_FIELD{}
+		return &PUT_FIELD{base.Index16Instruction{Name: "put field"}}
 	case 0xb6:
-		return &INVOKE_VIRTUAL{}
+		return &INVOKE_VIRTUAL{base.Index16Instruction{Name: "invoke virtual"}}
 	case 0xb7:
-		return &INVOKE_SPECIAL{}
+		return &INVOKE_SPECIAL{Index16Instruction: base.Index16Instruction{Name: "invoke special"}}
 	case 0xb8:
-		return &INVOKE_STATIC{}
+		return &INVOKE_STATIC{Index16Instruction: base.Index16Instruction{Name: "invoke static"}}
 	case 0xb9:
-		return &INVOKE_INTERFACE{}
+		return &INVOKE_INTERFACE{Name: "invoke interface"}
 	// case 0xba:
 	// 	return &INVOKE_DYNAMIC{}
 	case 0xbb:
-		return &NEW{}
+		return &NEW{Index16Instruction: base.Index16Instruction{Name: "new"}}
 	case 0xbc:
-		return &NEW_ARRAY{}
+		return &NEW_ARRAY{Name: "new array"}
 	case 0xbd:
-		return &ANEW_ARRAY{}
+		return &ANEW_ARRAY{Index16Instruction: base.Index16Instruction{Name: "anew array"}}
 	case 0xbe:
 		return arraylength
 	case 0xbf:
 		return athrow
 	case 0xc0:
-		return &CHECK_CAST{}
+		return &CHECK_CAST{Index16Instruction: base.Index16Instruction{Name: "check cast"}}
 	case 0xc1:
-		return &INSTANCE_OF{}
+		return &INSTANCE_OF{Index16Instruction: base.Index16Instruction{Name: "instance of"}}
 	case 0xc2:
 		return monitorenter
 	case 0xc3:
 		return monitorexit
 	case 0xc4:
-		return &WIDE{}
+		return &WIDE{Name: "wide"}
 	case 0xc5:
-		return &MULTI_ANEW_ARRAY{}
+		return &MULTI_ANEW_ARRAY{Name: "multi anew array"}
 	case 0xc6:
-		return &IFNULL{}
+		return &IFNULL{BranchInstruction: base.BranchInstruction{Name: "ifnull"}}
 	case 0xc7:
-		return &IFNONNULL{}
+		return &IFNONNULL{BranchInstruction: base.BranchInstruction{Name: "ifnonnull"}}
 	case 0xc8:
-		return &GOTO_W{}
+		return &GOTO_W{Name: "goto_w"}
 	// case 0xc9:
 	// 	return &JSR_W{}
 	// case 0xca: breakpoint

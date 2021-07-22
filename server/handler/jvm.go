@@ -52,5 +52,6 @@ func ParseCode(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		return
 	}
+	fmt.Println("Nice")
 	_, _ = w.Write(jsonfile)
 }
